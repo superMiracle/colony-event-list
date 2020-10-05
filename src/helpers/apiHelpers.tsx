@@ -27,7 +27,7 @@ const months = [
   "Dec",
 ];
 
-const getDateMonth = (millisec: number) => {
+const getDayAndMonth = (millisec: number) => {
   const dateTime = new Date(millisec);
   return dateTime.getDay() + " " + months[dateTime.getMonth()];
 };
@@ -66,7 +66,7 @@ export const getEventLogsColonyInitialised = async (client: ColonyClient) => {
     return {
       type: parsedEvent.name,
       avatar: parsedEvent.topic,
-      date: getDateMonth(logTime),
+      date: getDayAndMonth(logTime),
       values: [""],
     };
   });
@@ -100,12 +100,10 @@ export const getEventLogsPayoutClaimed = async (client: ColonyClient) => {
       parsedEvent.values.blockHash
     );
 
-    const time = new Date(logTime);
-
     return {
       type: parsedEvent.name,
       avatar: userAddress,
-      date: getDateMonth(logTime),
+      date: getDayAndMonth(logTime),
       values: [userAddress, amount, humanReadableFundingPotId],
     };
   });
@@ -134,12 +132,10 @@ export const getEventLogsColonyRoleSet = async (client: ColonyClient) => {
       parsedEvent.values.blockHash
     );
 
-    const time = new Date(logTime);
-
     return {
       type: parsedEvent.name,
       avatar: user,
-      date: getDateMonth(logTime),
+      date: getDayAndMonth(logTime),
       values: [role, user, domainId],
     };
   });
@@ -171,12 +167,10 @@ export const getEventLogsDomainAdded = async (client: ColonyClient) => {
       parsedEvent.values.blockHash
     );
 
-    const time = new Date(logTime);
-    console.log("time", time);
     return {
       type: parsedEvent.name,
       avatar: parsedEvent.topic,
-      date: getDateMonth(logTime),
+      date: getDayAndMonth(logTime),
       values: [humanReadableDomainId],
     };
   });
@@ -187,16 +181,16 @@ export const getEventLogsDomainAdded = async (client: ColonyClient) => {
 export const getEventLogs = async (client: ColonyClient) => {
   const eventsColonyInit = await getEventLogsColonyInitialised(client);
 
-  //   const eventsPayoutClaimed = await getEventLogsPayoutClaimed(client);
+  const eventsPayoutClaimed = await getEventLogsPayoutClaimed(client);
 
-  //   const eventsRoleSet = await getEventLogsColonyRoleSet(client);
+  const eventsRoleSet = await getEventLogsColonyRoleSet(client);
 
-  //   const eventsDomainAdded = await getEventLogsDomainAdded(client);
+  const eventsDomainAdded = await getEventLogsDomainAdded(client);
 
-  const events = eventsColonyInit;
-  // .concat(eventsDomainAdded)
-  // .concat(eventsPayoutClaimed)
-  // .concat(eventsRoleSet);
+  const events = eventsColonyInit
+    .concat(eventsDomainAdded)
+    .concat(eventsPayoutClaimed)
+    .concat(eventsRoleSet);
 
   console.log(events);
   return events;
