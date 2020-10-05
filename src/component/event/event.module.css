@@ -1,0 +1,46 @@
+.wrapper {
+  display: flex;
+  /* width: 100%;
+  height: 90px; */
+  padding: 26px 20px;
+  background: white;
+  border-radius: 6px;
+  margin: 2px;
+  box-shadow: 3px 3px rgba(62, 118, 244, 0.14);
+}
+
+.wrapper:hover {
+  background-color: #8ed3fc;
+}
+
+.avatar {
+  width: 37px;
+  height: 37px;
+  min-width: 37px;
+  min-height: 37px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.copy {
+  width: calc(100% - 67px);
+  font-family: "Mulish", sans-serif;
+  text-align: left;
+}
+
+.copy .text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.copy .text .bold {
+  font-weight: 700;
+}
+
+.copy .date {
+  font-size: 12px;
+  font-weight: 400;
+}

@@ -1,0 +1,1 @@
+export { BlockieIcon } from './bockie-icon';
