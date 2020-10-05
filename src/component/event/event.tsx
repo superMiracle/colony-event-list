@@ -2,11 +2,26 @@ import React, { useState, useEffect } from "react";
 import { BlockieIcon } from "../blockie-icon";
 import styles from "./event.module.css";
 
+const months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
 export interface IEvent {
   type: string;
   avatar: string;
   values: string[];
-  date: string;
+  date: Date;
 }
 
 export interface EventProps {
@@ -55,7 +70,9 @@ export const Event = (props: EventProps) => {
             </span>
           ) : null}
         </div>
-        <div className={styles.date}>{props.data.date}</div>
+        <div className={styles.date}>
+          {props.data.date.getDay() + " " + months[props.data.date.getMonth()]}
+        </div>
       </div>
     </div>
   );

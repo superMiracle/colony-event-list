@@ -12,25 +12,6 @@ import { utils } from "ethers";
 
 const MAINNET_NETWORK_ADDRESS = `0x5346D0f80e2816FaD329F2c140c870ffc3c3E2Ef`;
 const MAINNET_BETACOLONY_ADDRESS = `0x869814034d96544f3C62DE2aC22448ed79Ac8e70`;
-const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
-const getDayAndMonth = (millisec: number) => {
-  const dateTime = new Date(millisec);
-  return dateTime.getDay() + " " + months[dateTime.getMonth()];
-};
 
 export const createColonyClient = async () => {
   const provider = new InfuraProvider();
@@ -66,7 +47,7 @@ export const getEventLogsColonyInitialised = async (client: ColonyClient) => {
     return {
       type: parsedEvent.name,
       avatar: parsedEvent.topic,
-      date: getDayAndMonth(logTime),
+      date: new Date(logTime),
       values: [""],
     };
   });
@@ -103,7 +84,7 @@ export const getEventLogsPayoutClaimed = async (client: ColonyClient) => {
     return {
       type: parsedEvent.name,
       avatar: userAddress,
-      date: getDayAndMonth(logTime),
+      date: new Date(logTime),
       values: [userAddress, amount, humanReadableFundingPotId],
     };
   });
@@ -135,7 +116,7 @@ export const getEventLogsColonyRoleSet = async (client: ColonyClient) => {
     return {
       type: parsedEvent.name,
       avatar: user,
-      date: getDayAndMonth(logTime),
+      date: new Date(logTime),
       values: [role, user, domainId],
     };
   });
@@ -170,7 +151,7 @@ export const getEventLogsDomainAdded = async (client: ColonyClient) => {
     return {
       type: parsedEvent.name,
       avatar: parsedEvent.topic,
-      date: getDayAndMonth(logTime),
+      date: new Date(logTime),
       values: [humanReadableDomainId],
     };
   });
@@ -187,10 +168,14 @@ export const getEventLogs = async (client: ColonyClient) => {
 
   const eventsDomainAdded = await getEventLogsDomainAdded(client);
 
-  const events = eventsColonyInit
+  let events = eventsColonyInit
     .concat(eventsDomainAdded)
     .concat(eventsPayoutClaimed)
     .concat(eventsRoleSet);
+
+  events = events.sort((a, b) =>
+    a.date > b.date ? 1 : b.date > a.date ? -1 : 0
+  );
 
   console.log(events);
   return events;
